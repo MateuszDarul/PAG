@@ -31,7 +31,7 @@ private:
 
     Shape* orbita_1;
     Shape* planeta_1;
-    Shape* orbita_5;
+    Shape* orbita_2;
     Shape* ksiezyc_1;
 
 

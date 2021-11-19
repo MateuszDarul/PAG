@@ -5,6 +5,9 @@ UkladPlanet::UkladPlanet(int window_size_x, int window_size_y)
 {
     sphere_quality = 20;
     show_grid = false;
+    obrot_x = false;
+    obrot_y = false;
+    obrot_z = false;
 
 
 
@@ -33,17 +36,18 @@ UkladPlanet::UkladPlanet(int window_size_x, int window_size_y)
     planeta_1->getTransform()->setPosition(2, 0, 0);
     scene_graph->getNode(orbita_1)->addChild(planeta_1);
 
-    orbita_5 = new Circle(1);
-    orbita_5->generate(VertexType::Position_Color);
-    orbita_5->make();
-    orbita_5->getTransform()->setPosition(2, 0, 0);
-    scene_graph->getNode(orbita_1)->addChild(orbita_5);
+    orbita_2 = new Circle(1);
+    orbita_2->generate(VertexType::Position_Color);
+    orbita_2->make();
+    orbita_2->getTransform()->setPosition(2, 0, 0);
+    scene_graph->getNode(orbita_1)->addChild(orbita_2);
 
-    ksiezyc_1 = new Sphere(0.25, 5, 5);
+    ksiezyc_1 = new Tetraedr(0.25);
     ksiezyc_1->generate(VertexType::Position_Color);
     ksiezyc_1->make();
     ksiezyc_1->getTransform()->setPosition(1, 0, 0);
-    scene_graph->getNode(orbita_1)->getNode(orbita_5)->addChild(ksiezyc_1);
+    scene_graph->getNode(orbita_1)->getNode(orbita_2)->addChild(ksiezyc_1);
+
 }
 
 UkladPlanet::~UkladPlanet()
@@ -54,13 +58,9 @@ UkladPlanet::~UkladPlanet()
     slonce->remove();
     orbita_1->remove();
     planeta_1->remove();
-    orbita_5->remove();
-    ksiezyc_1->remove();
     delete slonce;
     delete orbita_1;
     delete planeta_1;
-    delete orbita_5;
-    delete ksiezyc_1;
 
 
     delete camera;
@@ -69,11 +69,6 @@ UkladPlanet::~UkladPlanet()
 
 void UkladPlanet::loop()
 {
-    if(show_grid)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    else
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
     if(obrot_x)
         scene_graph->getTransform()->rotate(1, 1, 0, 0);
     if(obrot_y)
@@ -81,8 +76,15 @@ void UkladPlanet::loop()
     if(obrot_z)
         scene_graph->getTransform()->rotate(1, 0, 0, 1);
 
-
-
+    slonce->getTransform()->rotate(0.5,0,0,1);
+    orbita_1->getTransform()->rotate(1,0,0,1);
+    {
+        planeta_1->getTransform()->rotate(-2,0,0,1);
+        orbita_2->getTransform()->rotate(1,0,0,1);
+        {
+            ksiezyc_1->getTransform()->rotate(-4,0,0,1);
+        }
+    }
 
     scene_graph->update();
     scene_graph->render(shader);
@@ -108,12 +110,19 @@ void UkladPlanet::gui()
     }
     ImGui::SameLine();
     ImGui::Text("Sphere quality (%d)", sphere_quality);
-    ImGui::Checkbox("Show grid", &show_grid);
+    if(ImGui::Button("Show grid"))
+    {
+        show_grid = !show_grid;
 
+        slonce->setDisplayMode(show_grid);
+        planeta_1->setDisplayMode(show_grid);
+        ksiezyc_1->setDisplayMode(show_grid);
+    }
     ImGui::Checkbox("X", &obrot_x);
     ImGui::SameLine();
     ImGui::Checkbox("Y", &obrot_y);
     ImGui::SameLine();
     ImGui::Checkbox("Z", &obrot_z);
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 0.001*ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
 }
