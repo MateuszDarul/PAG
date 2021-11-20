@@ -104,7 +104,7 @@ void Transform::move(float x, float y, float z)
 
 void Transform::setRotation(float degrees, float x, float y, float z)
 {
-    rotation_matrix = glm::rotate(glm::mat4(1.0f), (float)degrees, glm::vec3(x, y, z));
+    rotation_matrix = glm::rotate(glm::mat4(1.0f), glm::radians(degrees), glm::vec3(x, y, z));
     setModel(position_matrix * rotation_matrix * scale_matrix);
 }
 

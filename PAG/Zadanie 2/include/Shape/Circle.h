@@ -12,8 +12,9 @@ private:
     float precision;
 
 private:
-    void make_VT_PositionColor();
     void make_VT_Position();
+    void make_VT_PositionColor();
+    void make_VT_PositionTexture();
 
 public:
     Circle(float radius, float thickness = 1, float precision = 0.05);

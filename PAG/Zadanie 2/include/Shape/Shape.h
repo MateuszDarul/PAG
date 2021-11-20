@@ -24,6 +24,7 @@ enum VertexType
 enum FaceType
 {
     Undef = 0,
+    Line = 1,
     Triangle = 3,
     Square = 6
 };

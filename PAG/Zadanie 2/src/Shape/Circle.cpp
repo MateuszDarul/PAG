@@ -3,7 +3,7 @@
 Circle::Circle(float radius, float thickness, float precision)
     :radius(radius), thickness(thickness), precision(precision)
 {
-    //ctor
+    face_type = FaceType::Line;
 }
 
 Circle::~Circle()
@@ -46,6 +46,11 @@ void Circle::make()
         make_VT_PositionColor();
     }
     break;
+    case VertexType::Position_Texture:
+    {
+        make_VT_PositionTexture();
+    }
+    break;
 
     default:
         std::cerr << "This vertex type is not supported yet. [" << vertex_type << "]" << std::endl;
@@ -74,5 +79,17 @@ void Circle::make_VT_PositionColor()
         float y = radius * cos(angle);
 
         addVertex(Vertex6(x, y, 0, 1, 1, 1));
+    }
+}
+
+void Circle::make_VT_PositionTexture()
+{
+    float angle = 0;
+    for(angle=0; angle<=(2*M_PI)+precision; angle+=precision)
+    {
+        float x = sin(angle);
+        float y = cos(angle);
+
+        addVertex(Vertex5(radius*x, radius*y, 0, x, y));
     }
 }

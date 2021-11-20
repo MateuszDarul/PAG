@@ -2,7 +2,7 @@
 
 Line::Line(float thickness)
 {
-
+    face_type = FaceType::Line;
 }
 
 Line::~Line()

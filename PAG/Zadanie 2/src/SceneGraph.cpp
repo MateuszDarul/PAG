@@ -13,6 +13,7 @@ SceneGraph::~SceneGraph()
 
 SceneGraph* SceneGraph::getNode(Drawable* shape)
 {
+    std::cerr << "If you can use ID" << std::endl;
     for(unsigned int i=0; i<children.size(); i++)
     {
         if(children[i]->shape == shape)

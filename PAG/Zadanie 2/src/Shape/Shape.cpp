@@ -15,7 +15,7 @@ Shape::Shape()
 
 Shape::~Shape()
 {
-
+    remove();
 }
 
 void Shape::generate(VertexType vertex_type)

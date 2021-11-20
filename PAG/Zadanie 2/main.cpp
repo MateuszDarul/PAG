@@ -39,9 +39,9 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    const int window_size_x = 1000;
-    const int window_size_y = 900;
-    GLFWwindow* window = glfwCreateWindow(window_size_x, window_size_y, "OpenGL", NULL, NULL);
+    const int window_size_x = 1920;
+    const int window_size_y = 1080;
+    GLFWwindow* window = glfwCreateWindow(window_size_x, window_size_y, "OpenGL", glfwGetPrimaryMonitor(), NULL);
     if(window == NULL)
     {
         std::cerr << "Failed to create GLFW window" << std::endl;

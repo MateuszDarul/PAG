@@ -40,8 +40,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add option="-DGLFW_STATIC" />
-			<Add directory="E:/DevKit/MinGW_Lib/GLFW/include" />
-			<Add directory="E:/DevKit/MinGW_Lib/assimp/include" />
+			<Add directory="D:/DevKit/MinGW_Lib/GLFW/include" />
+			<Add directory="D:/DevKit/MinGW_Lib/assimp/include" />
 			<Add directory="../OpenGL" />
 			<Add directory="../OpenGL/GLAD/include" />
 			<Add directory="../OpenGL/ImGui" />
@@ -57,8 +57,8 @@
 			<Add library="glfw3" />
 			<Add library="gdi32" />
 			<Add library="assimp" />
-			<Add directory="E:/DevKit/MinGW_Lib/GLFW/build/src" />
-			<Add directory="E:/DevKit/MinGW_Lib/assimp/build/lib" />
+			<Add directory="D:/DevKit/MinGW_Lib/GLFW/build/src" />
+			<Add directory="D:/DevKit/MinGW_Lib/assimp/build/lib" />
 		</Linker>
 		<Unit filename="../OpenGL/GLAD/include/glad/glad.h" />
 		<Unit filename="../OpenGL/GLAD/src/glad.c">
