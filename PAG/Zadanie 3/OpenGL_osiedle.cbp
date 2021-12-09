@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="OpenGL_osiedle" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/OpenGL_osiedle" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="include" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/OpenGL_osiedle" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add option="-DGLFW_STATIC" />
+			<Add directory="E:/DevKit/MinGW_Lib/GLFW/include" />
+			<Add directory="OpenGL" />
+			<Add directory="OpenGL/GLAD/include" />
+			<Add directory="OpenGL/ImGui" />
+			<Add directory="OpenGL/ImGui/include" />
+			<Add directory="OpenGL/GL_stb_image/include" />
+			<Add directory="Shape" />
+		</Compiler>
+		<Linker>
+			<Add library="glfw3" />
+			<Add library="gdi32" />
+			<Add directory="E:/DevKit/MinGW_Lib/GLFW/build/src" />
+		</Linker>
+		<Unit filename="OpenGL/GLAD/include/glad/glad.h" />
+		<Unit filename="OpenGL/GLAD/src/glad.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="OpenGL/GL_stb_image/include/stb_image.h" />
+		<Unit filename="OpenGL/GL_stb_image/src/stb_image.cpp" />
+		<Unit filename="OpenGL/ImGui/include/imconfig.h" />
+		<Unit filename="OpenGL/ImGui/include/imgui.h" />
+		<Unit filename="OpenGL/ImGui/include/imgui_impl_glfw.h" />
+		<Unit filename="OpenGL/ImGui/include/imgui_impl_opengl3.h" />
+		<Unit filename="OpenGL/ImGui/include/imgui_impl_opengl3_loader.h" />
+		<Unit filename="OpenGL/ImGui/include/imgui_internal.h" />
+		<Unit filename="OpenGL/ImGui/include/imstb_rectpack.h" />
+		<Unit filename="OpenGL/ImGui/include/imstb_textedit.h" />
+		<Unit filename="OpenGL/ImGui/include/imstb_truetype.h" />
+		<Unit filename="OpenGL/ImGui/src/imgui.cpp" />
+		<Unit filename="OpenGL/ImGui/src/imgui_demo.cpp" />
+		<Unit filename="OpenGL/ImGui/src/imgui_draw.cpp" />
+		<Unit filename="OpenGL/ImGui/src/imgui_impl_glfw.cpp" />
+		<Unit filename="OpenGL/ImGui/src/imgui_impl_opengl3.cpp" />
+		<Unit filename="OpenGL/ImGui/src/imgui_tables.cpp" />
+		<Unit filename="OpenGL/ImGui/src/imgui_widgets.cpp" />
+		<Unit filename="include/Camera.h" />
+		<Unit filename="include/Cube.h" />
+		<Unit filename="include/Floor.h" />
+		<Unit filename="include/RenderObject.h" />
+		<Unit filename="include/SceneGraphNode.h" />
+		<Unit filename="include/Shader.h" />
+		<Unit filename="include/Transform.h" />
+		<Unit filename="include/UserInterface.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="resources/shaders/fragmentShader.frag" />
+		<Unit filename="resources/shaders/vertexShader.vert" />
+		<Unit filename="src/Camera.cpp" />
+		<Unit filename="src/Cube.cpp" />
+		<Unit filename="src/Floor.cpp" />
+		<Unit filename="src/RenderObject.cpp" />
+		<Unit filename="src/SceneGraphNode.cpp" />
+		<Unit filename="src/Shader.cpp" />
+		<Unit filename="src/Transform.cpp" />
+		<Unit filename="src/UserInterface.cpp" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
