@@ -153,21 +153,21 @@ int main()
             {
                 kat += 0.001;
                 user_interface->point_light_position[0] = cos( kat ) * promien;
-                user_interface->point_light_position[1] = 5.f;
+                user_interface->point_light_position[1] = 50.f;
                 user_interface->point_light_position[2] = sin( kat ) * promien;
             }
             light_box_1_node->GetTransform().position = glm::vec3(user_interface->point_light_position[0],
-                                                                  user_interface->point_light_position[1],
-                                                                  user_interface->point_light_position[2]);
+                    user_interface->point_light_position[1],
+                    user_interface->point_light_position[2]);
 
 
             light_box_2_node->GetTransform().position = glm::vec3(user_interface->spot_light_1_position[0],
-                                                                  user_interface->spot_light_1_position[1],
-                                                                  user_interface->spot_light_1_position[2]);
+                    user_interface->spot_light_1_position[1],
+                    user_interface->spot_light_1_position[2]);
 
             light_box_3_node->GetTransform().position = glm::vec3(user_interface->spot_light_2_position[0],
-                                                                  user_interface->spot_light_2_position[1],
-                                                                  user_interface->spot_light_2_position[2]);
+                    user_interface->spot_light_2_position[1],
+                    user_interface->spot_light_2_position[2]);
 
             should_render = true;
             unprecessed_time -= frame_time;
@@ -188,44 +188,56 @@ int main()
             shader_default.use();
             shader_default.setMat4("projection", projection);
             shader_default.setMat4("view", view);
-
             shader_default.setVec3("viewPos", camera.GetPosition());
 
+            ///---Point---///
+
             shader_default.setBool("point_light_enable", user_interface->point_light_enable);
-            shader_default.setFloat("point_lightSku", user_interface->point_lightSku);
-            shader_default.setFloat("point_lightWli", user_interface->point_lightWli);
-            shader_default.setFloat("point_lightWkw", user_interface->point_lightWkw);
-            shader_default.setVec3("point_lightPos",
-            glm::vec3(user_interface->point_light_position[0],
-                      user_interface->point_light_position[1],
-                      user_interface->point_light_position[2]));
-            shader_default.setVec3("point_lightCol",
-            glm::vec3(user_interface->point_light_color[0],
-                      user_interface->point_light_color[1],
-                      user_interface->point_light_color[2]));
+            shader_default.setVec3("point_light.position",
+                                   glm::vec3(user_interface->point_light_position[0],
+                                             user_interface->point_light_position[1],
+                                             user_interface->point_light_position[2]));
+            shader_default.setVec3("point_light.ambient", 0, 0, 0);
+            shader_default.setVec3("point_light.diffuse",
+                                   glm::vec3(user_interface->point_light_color[0],
+                                             user_interface->point_light_color[1],
+                                             user_interface->point_light_color[2]));
+            shader_default.setVec3("point_light.specular", 1.0f, 1.0f, 1.0f);
+            shader_default.setFloat("point_light.constant", 1.0f);
+            shader_default.setFloat("point_light.linear", user_interface->point_lightWli);
+            shader_default.setFloat("point_light.quadratic", user_interface->point_lightWkw);
+            shader_default.setFloat("point_material.shininess", user_interface->point_lightSku);
+
+            ///------///
+            ///---Directional---///
 
             shader_default.setBool("directional_light_enable", user_interface->directional_light_enable);
-            shader_default.setVec3("direction_lightDir",
-            glm::vec3(user_interface->directional_light_direction[0],
-                      user_interface->directional_light_direction[1],
-                      user_interface->directional_light_direction[2]));
-            shader_default.setVec3("direction_lightCol",
-            glm::vec3(user_interface->directional_light_color[0],
-                      user_interface->directional_light_color[1],
-                      user_interface->directional_light_color[2]));
+            shader_default.setVec3("directional_light.direction",
+                                   glm::vec3(user_interface->directional_light_direction[0],
+                                             user_interface->directional_light_direction[1],
+                                             user_interface->directional_light_direction[2]));
+            shader_default.setVec3("directional_light.ambient", 0.2f, 0.2f, 0.2f);
+            shader_default.setVec3("directional_light.diffuse",
+                                   glm::vec3(user_interface->directional_light_color[0],
+                                             user_interface->directional_light_color[1],
+                                             user_interface->directional_light_color[2]));
+            shader_default.setVec3("directional_light.specular", 1.0f, 1.0f, 1.0f);
+            shader_default.setFloat("directional_material.shininess", 32.0f);
 
+            ///------///
+            ///---Spot 1---///
 
             shader_default.setBool("spot_1_light_enable", user_interface->spot_light_1_enable);
             shader_default.setVec3("light_1.position",
-            glm::vec3(user_interface->spot_light_1_position[0],
-                      user_interface->spot_light_1_position[1],
-                      user_interface->spot_light_1_position[2]));
+                                   glm::vec3(user_interface->spot_light_1_position[0],
+                                             user_interface->spot_light_1_position[1],
+                                             user_interface->spot_light_1_position[2]));
             shader_default.setVec3("light_1.direction",
-            glm::vec3(user_interface->spot_light_1_direction[0],
-                      user_interface->spot_light_1_direction[1],
-                      user_interface->spot_light_1_direction[2]));
-            shader_default.setFloat("light_1.cutOff", glm::cos(glm::radians(12.5f)));
-            shader_default.setFloat("light_1.outerCutOff", glm::cos(glm::radians(17.5f)));
+                                   glm::vec3(user_interface->spot_light_1_direction[0],
+                                             user_interface->spot_light_1_direction[1],
+                                             user_interface->spot_light_1_direction[2]));
+            shader_default.setFloat("light_1.cutOff", glm::cos(glm::radians(user_interface->spot_light_1_radius[0])));
+            shader_default.setFloat("light_1.outerCutOff", glm::cos(glm::radians(user_interface->spot_light_1_radius[0]+user_interface->spot_light_1_radius[1])));
             shader_default.setVec3("light_1.specular", 1.f, 1.f, 1.f);
             shader_default.setFloat("light_1.constant", 1.0f);
             shader_default.setFloat("light_1.linear", user_interface->spot_light_1_range);
@@ -233,21 +245,24 @@ int main()
             shader_default.setFloat("material_1.shininess", 32.0f);
             shader_default.setVec3("light_1.ambient", 0.f, 0.f, 0.f);
             shader_default.setVec3("light_1.diffuse",
-            glm::vec3(user_interface->spot_light_1_color[0],
-                      user_interface->spot_light_1_color[1],
-                      user_interface->spot_light_1_color[2]));
+                                   glm::vec3(user_interface->spot_light_1_color[0],
+                                             user_interface->spot_light_1_color[1],
+                                             user_interface->spot_light_1_color[2]));
+
+            ///------///
+            ///---Spot 2---///
 
             shader_default.setBool("spot_2_light_enable", user_interface->spot_light_2_enable);
             shader_default.setVec3("light_2.position",
-            glm::vec3(user_interface->spot_light_2_position[0],
-                      user_interface->spot_light_2_position[1],
-                      user_interface->spot_light_2_position[2]));
+                                   glm::vec3(user_interface->spot_light_2_position[0],
+                                             user_interface->spot_light_2_position[1],
+                                             user_interface->spot_light_2_position[2]));
             shader_default.setVec3("light_2.direction",
-            glm::vec3(user_interface->spot_light_2_direction[0],
-                      user_interface->spot_light_2_direction[1],
-                      user_interface->spot_light_2_direction[2]));
-            shader_default.setFloat("light_2.cutOff", glm::cos(glm::radians(12.5f)));
-            shader_default.setFloat("light_2.outerCutOff", glm::cos(glm::radians(17.5f)));
+                                   glm::vec3(user_interface->spot_light_2_direction[0],
+                                             user_interface->spot_light_2_direction[1],
+                                             user_interface->spot_light_2_direction[2]));
+            shader_default.setFloat("light_2.cutOff", glm::cos(glm::radians(user_interface->spot_light_2_radius[0])));
+            shader_default.setFloat("light_2.outerCutOff", glm::cos(glm::radians(user_interface->spot_light_2_radius[0]+user_interface->spot_light_2_radius[1])));
             shader_default.setVec3("light_2.specular", 1.f, 1.f, 1.f);
             shader_default.setFloat("light_2.constant", 1.0f);
             shader_default.setFloat("light_2.linear", user_interface->spot_light_2_range);
@@ -255,9 +270,11 @@ int main()
             shader_default.setFloat("material_2.shininess", 32.0f);
             shader_default.setVec3("light_2.ambient", 0.f, 0.f, 0.f);
             shader_default.setVec3("light_2.diffuse",
-            glm::vec3(user_interface->spot_light_2_color[0],
-                      user_interface->spot_light_2_color[1],
-                      user_interface->spot_light_2_color[2]));
+                                   glm::vec3(user_interface->spot_light_2_color[0],
+                                             user_interface->spot_light_2_color[1],
+                                             user_interface->spot_light_2_color[2]));
+
+            ///------///
 
             scene->Render(true);
 

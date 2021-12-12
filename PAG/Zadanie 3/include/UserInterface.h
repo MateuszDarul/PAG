@@ -32,12 +32,14 @@ public:
     float spot_light_1_position[3];
     float spot_light_1_direction[3];
     float spot_light_1_color[3];
+    float spot_light_1_radius[2];
 
     bool spot_light_2_enable;
     float spot_light_2_range;
     float spot_light_2_position[3];
     float spot_light_2_direction[3];
     float spot_light_2_color[3];
+    float spot_light_2_radius[2];
 
 public:
     UserInterface(GLFWwindow* window);
