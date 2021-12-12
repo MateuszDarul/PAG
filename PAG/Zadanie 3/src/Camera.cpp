@@ -68,3 +68,8 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constr
 
     updateCameraVectors();
 }
+
+glm::vec3 Camera::GetPosition()
+{
+    return Position;
+}

@@ -42,7 +42,7 @@ void SceneGraphNode::Update(const Transform& parent_transform, bool dirty_)
 
     for(unsigned short int i=0; i<children.size(); i++)
     {
-        children[i]->Update(parent_transform, dirty_);
+        children[i]->Update(transform, dirty_);
     }
 }
 
@@ -52,19 +52,17 @@ void SceneGraphNode::UpdateTransform()
     dirty = true;
 }
 
-void SceneGraphNode::Render(Shader& shader, bool is_root)
+void SceneGraphNode::Render(bool is_root)
 {
     if(!is_root)
     {
-        shader.use();
-        shader.setBool("use_texture", true);
-        shader.setMat4("transformations", transform.world_matrix);
+        obj->setTransform(transform.world_matrix);
         obj->Draw();
     }
 
     for(unsigned short int i=0; i<children.size(); i++)
     {
-        children[i]->Render(shader);
+        children[i]->Render();
     }
 }
 

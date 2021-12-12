@@ -1,9 +1,10 @@
-#ifndef __FLOOR_H__
-#define __FLOOR_H__
+#ifndef LIGHTMARK_H
+#define LIGHTMARK_H
 
 #include "RenderObject.h"
 
-class Floor : public RenderObject
+
+class LightMark : public RenderObject
 {
 private:
     unsigned int TEX;
@@ -14,11 +15,11 @@ private:
     unsigned int VBO;
 
 public:
-    Floor();
-    ~Floor();
+    LightMark();
+    ~LightMark();
 
     void Create(Shader* shader, float size_x, float size_y, float size_z);
     void Draw();
 };
 
-#endif // __FLOOR_H__
+#endif // LIGHTMARK_H

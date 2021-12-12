@@ -1,23 +1,18 @@
-#include "Cube.h"
+#include "LightMark.h"
 
-Cube::Cube(glm::vec3 *transformations)
+LightMark::LightMark()
 {
-    this->transformations = transformations;
+
 }
 
-Cube::~Cube()
+LightMark::~LightMark()
 {
-    //dtor
+
 }
 
-void Cube::Create(Shader* shader, float size_x, float size_y, float size_z)
+void LightMark::Create(Shader* shader, float size_x, float size_y, float size_z)
 {
     this->shader = shader;
-
-    glGenBuffers(1, &instanceVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*ilosc_instancji*ilosc_instancji, &transformations[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     float vertices[] =
     {
@@ -79,48 +74,16 @@ void Cube::Create(Shader* shader, float size_x, float size_y, float size_z)
     glEnableVertexAttribArray(1);
 
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(6*sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(3);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glVertexAttribDivisor(3, 1);
-
-
-    glGenTextures(1, &TEX);
-    glBindTexture(GL_TEXTURE_2D, TEX);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    stbi_set_flip_vertically_on_load(true);
-
-    const char* file_name = "resources/textures/Brick.jpg";
-    data = stbi_load(file_name, &width, &height, &nrChannels, 0);
-    if(data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
+    glEnableVertexAttribArray(1);
 }
 
-void Cube::Draw()
+void LightMark::Draw()
 {
     shader->use();
     shader->setMat4("model", transform);
-
-    glActiveTexture(GL_TEXTURE);
-    glBindTexture(GL_TEXTURE_2D, TEX);
+    shader->setBool("mark", true);
 
     glBindVertexArray(VAO);
-    glDrawArraysInstanced(GL_TRIANGLES, 0, 36, ilosc_instancji*ilosc_instancji);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    shader->setBool("mark", false);
 }

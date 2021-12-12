@@ -3,10 +3,9 @@
 
 #include "RenderObject.h"
 
-
 class Cube : public RenderObject
 {
-    private:
+private:
     unsigned int TEX;
     int width, height, nrChannels;
     unsigned char *data;
@@ -15,10 +14,13 @@ class Cube : public RenderObject
     unsigned int VBO;
 
 public:
-    Cube();
+    unsigned int instanceVBO;
+    glm::vec3 *transformations;
+
+    Cube(glm::vec3 *transformations);
     ~Cube();
 
-    void Create(float size_x, float size_y, float size_z);
+    void Create(Shader* shader, float size_x, float size_y, float size_z);
     void Draw();
 };
 

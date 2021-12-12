@@ -10,15 +10,19 @@ Floor::~Floor()
     //dtor
 }
 
-void Floor::Create(float size_x, float size_y, float size_z)
+void Floor::Create(Shader* shader, float size_x, float size_y, float size_z)
 {
-    float vertices[] = {
-        -0.5f*size_x, size_y,  0.5f*size_z, 0, 1,
-        -0.5f*size_x, size_y, -0.5f*size_z, 0, 0,
-         0.5f*size_x, size_y, -0.5f*size_z, 1, 0,
-        -0.5f*size_x, size_y,  0.5f*size_z, 0, 1,
-         0.5f*size_x, size_y,  0.5f*size_z, 1, 1,
-         0.5f*size_x, size_y, -0.5f*size_z, 1, 0
+    this->shader = shader;
+
+    float vertices[] =
+    {
+        1.0f*size_x, size_y,  1.0f*size_z, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+        -1.0f*size_x, size_y,  1.0f*size_z, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+        -1.0f*size_x, size_y, -1.0f*size_z, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+
+        1.0f*size_x, size_y,  1.0f*size_z, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+        -1.0f*size_x, size_y, -1.0f*size_z, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        1.0f*size_x, size_y, -1.0f*size_z, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f
     };
 
     glGenVertexArrays(1, &VAO);
@@ -29,10 +33,13 @@ void Floor::Create(float size_x, float size_y, float size_z)
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(0));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(0));
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(3*sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(3*sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(6*sizeof(float)));
     glEnableVertexAttribArray(2);
+
 
 
 
@@ -62,6 +69,9 @@ void Floor::Create(float size_x, float size_y, float size_z)
 
 void Floor::Draw()
 {
+    shader->use();
+    shader->setMat4("model", transform);
+
     glActiveTexture(GL_TEXTURE);
     glBindTexture(GL_TEXTURE_2D, TEX);
 

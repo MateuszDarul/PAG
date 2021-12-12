@@ -29,8 +29,8 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 double frame_time = 1.0/60.0;
 
 /// Window size
-unsigned int screen_width = 800;
-unsigned int screen_height = 600;
+unsigned int screen_width = 1600;
+unsigned int screen_height = 800;
 
 /// Camera
 Camera camera(glm::vec3(0.0f, 10.0f, 128.0f));
@@ -72,19 +72,57 @@ int main()
 
     UserInterface* user_interface = new UserInterface(window);
 
-    Shader shader("resources/shaders/vertexShader.vert", "resources/shaders/fragmentShader.frag");
+    Shader shader_default("resources/shaders/vertexShader.vert", "resources/shaders/fragmentShader.frag");
+
+
+    glm::vec3 tr[ilosc_instancji*ilosc_instancji];
+    int x=0, y=0;
+    for (int i = 0; i < ilosc_instancji*ilosc_instancji; i++)
+    {
+        tr[i] = glm::vec3(x*5, 0, y*5);
+
+        x++;
+        if(x % ilosc_instancji == 0)
+        {
+            x=0;
+            y++;
+        }
+    }
+
     std::shared_ptr<SceneGraphNode> scene = std::make_shared<SceneGraphNode>();
 
     std::shared_ptr<RenderObject> floor = std::make_shared<Floor>();
-    floor->Create(128,0,128);
+    floor->Create(&shader_default, 512,0,512);
     std::shared_ptr<SceneGraphNode> floor_node = std::make_shared<SceneGraphNode>(floor);
     scene->AddChild(floor_node);
 
-    std::shared_ptr<RenderObject> cube = std::make_shared<Cube>();
-    cube->Create(20,20,20);
-    std::shared_ptr<SceneGraphNode> cube_node = std::make_shared<SceneGraphNode>(cube);
-    cube_node->GetTransform().position += glm::vec3(20, 10, 0);
-    floor_node->AddChild(cube_node);
+    std::shared_ptr<RenderObject> cube = std::make_shared<Cube>(tr);
+    cube->Create(&shader_default, 1,1,1);
+    std::shared_ptr<SceneGraphNode> domki = std::make_shared<SceneGraphNode>(cube);
+    domki->GetTransform().position += glm::vec3(-510, 0.5, -510);
+    floor_node->AddChild(domki);
+
+    std::shared_ptr<RenderObject> pyramid = std::make_shared<Pyramid>(tr);
+    pyramid->Create(&shader_default, 1.5,1,1.5);
+    std::shared_ptr<SceneGraphNode> dachy = std::make_shared<SceneGraphNode>(pyramid);
+    dachy->GetTransform().position += glm::vec3(0, 1, 0);
+    domki->AddChild(dachy);
+
+
+    std::shared_ptr<RenderObject> light_box_1 = std::make_shared<LightMark>();
+    light_box_1->Create(&shader_default, 1,1,1);
+    std::shared_ptr<SceneGraphNode> light_box_1_node = std::make_shared<SceneGraphNode>(light_box_1);
+    floor_node->AddChild(light_box_1_node);
+
+    std::shared_ptr<RenderObject> light_box_2 = std::make_shared<LightMark>();
+    light_box_2->Create(&shader_default, 1,1,1);
+    std::shared_ptr<SceneGraphNode> light_box_2_node = std::make_shared<SceneGraphNode>(light_box_2);
+    floor_node->AddChild(light_box_2_node);
+
+    std::shared_ptr<RenderObject> light_box_3 = std::make_shared<LightMark>();
+    light_box_3->Create(&shader_default, 1,1,1);
+    std::shared_ptr<SceneGraphNode> light_box_3_node = std::make_shared<SceneGraphNode>(light_box_3);
+    floor_node->AddChild(light_box_3_node);
 
     double last_time = glfwGetTime();
     double unprecessed_time = 0.0;
@@ -92,8 +130,10 @@ int main()
     double passed_time = 0.0;
     bool should_render = false;
 
-    Transform camera_transformations;
-    Transform old_camera_transformations;
+    glm::mat4 projection;
+    glm::mat4 view;
+
+    float kat = 0, promien=510;
 
     while(!glfwWindowShouldClose(window))
     {
@@ -109,20 +149,34 @@ int main()
         /// update
         while(unprecessed_time >= frame_time)
         {
+            if(user_interface->point_light_spin)
+            {
+                kat += 0.001;
+                user_interface->point_light_position[0] = cos( kat ) * promien;
+                user_interface->point_light_position[1] = 5.f;
+                user_interface->point_light_position[2] = sin( kat ) * promien;
+            }
+            light_box_1_node->GetTransform().position = glm::vec3(user_interface->point_light_position[0],
+                                                                  user_interface->point_light_position[1],
+                                                                  user_interface->point_light_position[2]);
+
+
+            light_box_2_node->GetTransform().position = glm::vec3(user_interface->spot_light_1_position[0],
+                                                                  user_interface->spot_light_1_position[1],
+                                                                  user_interface->spot_light_1_position[2]);
+
+            light_box_3_node->GetTransform().position = glm::vec3(user_interface->spot_light_2_position[0],
+                                                                  user_interface->spot_light_2_position[1],
+                                                                  user_interface->spot_light_2_position[2]);
+
             should_render = true;
             unprecessed_time -= frame_time;
 
-
-            cube_node->GetTransform().position += glm::vec3(-0.1, 0, 0);
-
             /// camera
-            camera_transformations.world_matrix =
-                glm::perspective(glm::radians(45.0f), (float)screen_width/(float)screen_height, 0.1f, 1000.0f)
-                *
-                camera.GetViewMatrix();
-            bool camera_change = old_camera_transformations.world_matrix != camera_transformations.world_matrix;
-            scene->Update(camera_transformations, camera_change);
-            old_camera_transformations = camera_transformations;
+            projection = glm::perspective(glm::radians(45.0f), (float)screen_width/(float)screen_height, 0.1f, 1000.0f);
+            view = camera.GetViewMatrix();
+
+            scene->Update(Transform(), false);
         }
 
         /// render
@@ -131,11 +185,81 @@ int main()
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+            shader_default.use();
+            shader_default.setMat4("projection", projection);
+            shader_default.setMat4("view", view);
+
+            shader_default.setVec3("viewPos", camera.GetPosition());
+
+            shader_default.setBool("point_light_enable", user_interface->point_light_enable);
+            shader_default.setFloat("point_lightSku", user_interface->point_lightSku);
+            shader_default.setFloat("point_lightWli", user_interface->point_lightWli);
+            shader_default.setFloat("point_lightWkw", user_interface->point_lightWkw);
+            shader_default.setVec3("point_lightPos",
+            glm::vec3(user_interface->point_light_position[0],
+                      user_interface->point_light_position[1],
+                      user_interface->point_light_position[2]));
+            shader_default.setVec3("point_lightCol",
+            glm::vec3(user_interface->point_light_color[0],
+                      user_interface->point_light_color[1],
+                      user_interface->point_light_color[2]));
+
+            shader_default.setBool("directional_light_enable", user_interface->directional_light_enable);
+            shader_default.setVec3("direction_lightDir",
+            glm::vec3(user_interface->directional_light_direction[0],
+                      user_interface->directional_light_direction[1],
+                      user_interface->directional_light_direction[2]));
+            shader_default.setVec3("direction_lightCol",
+            glm::vec3(user_interface->directional_light_color[0],
+                      user_interface->directional_light_color[1],
+                      user_interface->directional_light_color[2]));
 
 
-            scene->Render(shader, true);
+            shader_default.setBool("spot_1_light_enable", user_interface->spot_light_1_enable);
+            shader_default.setVec3("light_1.position",
+            glm::vec3(user_interface->spot_light_1_position[0],
+                      user_interface->spot_light_1_position[1],
+                      user_interface->spot_light_1_position[2]));
+            shader_default.setVec3("light_1.direction",
+            glm::vec3(user_interface->spot_light_1_direction[0],
+                      user_interface->spot_light_1_direction[1],
+                      user_interface->spot_light_1_direction[2]));
+            shader_default.setFloat("light_1.cutOff", glm::cos(glm::radians(12.5f)));
+            shader_default.setFloat("light_1.outerCutOff", glm::cos(glm::radians(17.5f)));
+            shader_default.setVec3("light_1.specular", 1.f, 1.f, 1.f);
+            shader_default.setFloat("light_1.constant", 1.0f);
+            shader_default.setFloat("light_1.linear", user_interface->spot_light_1_range);
+            shader_default.setFloat("light_1.quadratic", 0.00f);
+            shader_default.setFloat("material_1.shininess", 32.0f);
+            shader_default.setVec3("light_1.ambient", 0.f, 0.f, 0.f);
+            shader_default.setVec3("light_1.diffuse",
+            glm::vec3(user_interface->spot_light_1_color[0],
+                      user_interface->spot_light_1_color[1],
+                      user_interface->spot_light_1_color[2]));
 
+            shader_default.setBool("spot_2_light_enable", user_interface->spot_light_2_enable);
+            shader_default.setVec3("light_2.position",
+            glm::vec3(user_interface->spot_light_2_position[0],
+                      user_interface->spot_light_2_position[1],
+                      user_interface->spot_light_2_position[2]));
+            shader_default.setVec3("light_2.direction",
+            glm::vec3(user_interface->spot_light_2_direction[0],
+                      user_interface->spot_light_2_direction[1],
+                      user_interface->spot_light_2_direction[2]));
+            shader_default.setFloat("light_2.cutOff", glm::cos(glm::radians(12.5f)));
+            shader_default.setFloat("light_2.outerCutOff", glm::cos(glm::radians(17.5f)));
+            shader_default.setVec3("light_2.specular", 1.f, 1.f, 1.f);
+            shader_default.setFloat("light_2.constant", 1.0f);
+            shader_default.setFloat("light_2.linear", user_interface->spot_light_2_range);
+            shader_default.setFloat("light_2.quadratic", 0.00f);
+            shader_default.setFloat("material_2.shininess", 32.0f);
+            shader_default.setVec3("light_2.ambient", 0.f, 0.f, 0.f);
+            shader_default.setVec3("light_2.diffuse",
+            glm::vec3(user_interface->spot_light_2_color[0],
+                      user_interface->spot_light_2_color[1],
+                      user_interface->spot_light_2_color[2]));
 
+            scene->Render(true);
 
             user_interface->Display();
 
@@ -194,6 +318,7 @@ void processInput(GLFWwindow *window)
 
         if(isPressed)
         {
+            enable_menu = !enable_menu;
             if(enable_menu)
             {
                 glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -202,13 +327,14 @@ void processInput(GLFWwindow *window)
             {
                 glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             }
-            enable_menu = !enable_menu;
         }
     }
 }
 
 void mouseCallback(GLFWwindow* window, double xpos, double ypos)
 {
+    if(enable_menu)return;
+
     if(firstMouse)
     {
         lastX = xpos;

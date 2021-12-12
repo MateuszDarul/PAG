@@ -27,7 +27,7 @@ public:
 
     void Update(const Transform& parent_transform, bool dirty_);
     void UpdateTransform();
-    void Render(Shader& shader, bool is_root=false);
+    void Render(bool is_root=false);
 
     Transform& GetTransform();
 };

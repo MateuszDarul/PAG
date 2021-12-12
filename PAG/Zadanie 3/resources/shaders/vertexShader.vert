@@ -1,18 +1,26 @@
 #version 450 core
 
-layout (location = 0) in vec3 vPos;
-layout (location = 1) in vec3 vCol;
-layout (location = 2) in vec2 vTex;
-layout (location = 3) in mat4 mIns;
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aNormal;
+layout (location = 2) in vec2 aTexCoords;
+layout (location = 3) in vec3 aOffset;
 
-out vec4 vertex_color;
-out vec2 vertex_texture;
+out VS_OUT {
+    vec3 FragPos;
+    vec3 Normal;
+    vec2 TexCoords;
+} vs_out;
 
-uniform mat4 transformations;
+uniform mat4 projection;
+uniform mat4 view;
+uniform mat4 model;
 
 void main()
 {
-    vertex_color = vec4(vCol, 1);
-    vertex_texture = vTex;
-    gl_Position = transformations * vec4(vPos, 1.0);
+    vec3 nPos = aPos + aOffset;
+    vs_out.FragPos = vec3(model * vec4(nPos, 1.0));
+    vs_out.Normal = mat3(transpose(inverse(model))) * aNormal;
+
+    vs_out.TexCoords = aTexCoords;
+    gl_Position = projection * view * model * vec4(nPos, 1.0);
 }
