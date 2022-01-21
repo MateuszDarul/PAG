@@ -2,32 +2,30 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="OpenGL_osiedle" />
+		<Option title="OpenGL_koparka" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/OpenGL_osiedle" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/OpenGL_koparka" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add directory="include" />
-					<Add directory="Zadanie 3/include" />
-					<Add directory="D:/Code/Git/PAG/PAG/Zadanie 3/include" />
+					<Add directory="Zadanie 4/include" />
+					<Add directory="Zadanie 4/include/koparka" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/OpenGL_osiedle" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/OpenGL_koparka" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
-					<Add directory="include" />
-					<Add directory="Zadanie 3/include" />
-					<Add directory="D:/Code/Git/PAG/PAG/Zadanie 3/include" />
+					<Add directory="Zadanie 4/include" />
+					<Add directory="Zadanie 4/include/koparka" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -38,16 +36,18 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add option="-DGLFW_STATIC" />
-			<Add directory="D:/DevKit/MinGW_Lib/GLFW/include" />
+			<Add directory="E:/DevKit/MinGW_Lib/GLFW/include" />
 			<Add directory="../OpenGL" />
 			<Add directory="../OpenGL/GLAD/include" />
 			<Add directory="../OpenGL/ImGui/include" />
 			<Add directory="../OpenGL/GL_stb_image/include" />
+			<Add directory="include" />
+			<Add directory="include/koparka" />
 		</Compiler>
 		<Linker>
 			<Add library="glfw3" />
 			<Add library="gdi32" />
-			<Add directory="D:/DevKit/MinGW_Lib/GLFW/build/src" />
+			<Add directory="E:/DevKit/MinGW_Lib/GLFW/build/src" />
 		</Linker>
 		<Unit filename="../OpenGL/GLAD/include/glad/glad.h" />
 		<Unit filename="../OpenGL/GLAD/src/glad.c">
@@ -362,11 +362,21 @@
 		<Unit filename="include/RenderObject.h" />
 		<Unit filename="include/SceneGraphNode.h" />
 		<Unit filename="include/Shader.h" />
+		<Unit filename="include/Skybox.h" />
 		<Unit filename="include/Transform.h" />
 		<Unit filename="include/UserInterface.h" />
+		<Unit filename="include/koparka/Mirror.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="resources/shaders/fragmentShader.frag" />
-		<Unit filename="resources/shaders/vertexShader.vert" />
+		<Unit filename="resources/shaders/instance.frag" />
+		<Unit filename="resources/shaders/instance.vert" />
+		<Unit filename="resources/shaders/main.frag" />
+		<Unit filename="resources/shaders/main.vert" />
+		<Unit filename="resources/shaders/reflact.frag" />
+		<Unit filename="resources/shaders/reflact.vert" />
+		<Unit filename="resources/shaders/reflect.frag" />
+		<Unit filename="resources/shaders/reflect.vert" />
+		<Unit filename="resources/shaders/skybox.frag" />
+		<Unit filename="resources/shaders/skybox.vert" />
 		<Unit filename="src/Camera.cpp" />
 		<Unit filename="src/Cube.cpp" />
 		<Unit filename="src/Floor.cpp" />
@@ -375,8 +385,10 @@
 		<Unit filename="src/RenderObject.cpp" />
 		<Unit filename="src/SceneGraphNode.cpp" />
 		<Unit filename="src/Shader.cpp" />
+		<Unit filename="src/Skybox.cpp" />
 		<Unit filename="src/Transform.cpp" />
 		<Unit filename="src/UserInterface.cpp" />
+		<Unit filename="src/koparka/Mirror.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
