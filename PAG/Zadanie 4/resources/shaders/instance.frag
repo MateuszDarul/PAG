@@ -55,7 +55,7 @@ uniform Material material_2;
 void main()
 {
     vec3 color = texture(texture_data, fs_in.TexCoords).rgb;
-    vec3 ambient = 0 * color;
+    vec3 ambient = 0.1 * color;
     vec3 normal = normalize(fs_in.Normal);
     vec3 viewDir = normalize(viewPos - fs_in.FragPos);
 

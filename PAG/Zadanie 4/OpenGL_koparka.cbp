@@ -365,16 +365,18 @@
 		<Unit filename="include/Skybox.h" />
 		<Unit filename="include/Transform.h" />
 		<Unit filename="include/UserInterface.h" />
+		<Unit filename="include/koparka/Box.h" />
+		<Unit filename="include/koparka/Glass.h" />
 		<Unit filename="include/koparka/Mirror.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="resources/shaders/instance.frag" />
 		<Unit filename="resources/shaders/instance.vert" />
 		<Unit filename="resources/shaders/main.frag" />
 		<Unit filename="resources/shaders/main.vert" />
-		<Unit filename="resources/shaders/reflact.frag" />
-		<Unit filename="resources/shaders/reflact.vert" />
 		<Unit filename="resources/shaders/reflect.frag" />
 		<Unit filename="resources/shaders/reflect.vert" />
+		<Unit filename="resources/shaders/refract.frag" />
+		<Unit filename="resources/shaders/refract.vert" />
 		<Unit filename="resources/shaders/skybox.frag" />
 		<Unit filename="resources/shaders/skybox.vert" />
 		<Unit filename="src/Camera.cpp" />
@@ -388,6 +390,8 @@
 		<Unit filename="src/Skybox.cpp" />
 		<Unit filename="src/Transform.cpp" />
 		<Unit filename="src/UserInterface.cpp" />
+		<Unit filename="src/koparka/Box.cpp" />
+		<Unit filename="src/koparka/Glass.cpp" />
 		<Unit filename="src/koparka/Mirror.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

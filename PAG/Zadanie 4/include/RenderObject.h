@@ -39,5 +39,9 @@ public:
 #include "Skybox.h"
 
 #include "Mirror.h"
+#include "Glass.h"
+
+#include "Box.h"
+
 
 #endif // __RENDEROBJECT_H__

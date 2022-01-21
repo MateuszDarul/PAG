@@ -130,6 +130,50 @@ int main()
     glass_node->GetTransform().position += glm::vec3(40,10,0);
     floor_node->AddChild(glass_node);
 
+    static int ilosc_elementow = 10;
+    std::shared_ptr<RenderObject> box[ilosc_elementow];
+    std::shared_ptr<SceneGraphNode> box_node[ilosc_elementow];
+    {///KOPARKA
+
+        int szer = 5;
+        int dlug = 10;
+
+        /// 0 : Korpus
+        box[0] = std::make_shared<Box>();
+        box[0]->Create(&shader_default, 2*dlug, 2, 1.5*szer);
+        box_node[0] = std::make_shared<SceneGraphNode>(box[0]);
+        box_node[0]->GetTransform().position += glm::vec3(-40,10,0);
+        floor_node->AddChild(box_node[0]);
+
+        /// 1 - 9 : Kola
+        for(int i=1; i<9; i++)
+        {
+            box[i] = std::make_shared<Box>();
+            box[i]->Create(&shader_default, 5, 5, 2.5);
+            box_node[i] = std::make_shared<SceneGraphNode>(box[i]);
+            box_node[i]->GetTransform().position += glm::vec3(0,-2,0);
+            if(i%2 == 0)
+                box_node[i]->GetTransform().rotation += glm::vec3(0, 0, 45);
+
+            box_node[0]->AddChild(box_node[i]);
+        }
+        box_node[1]->GetTransform().position += glm::vec3(dlug,0,szer);
+        box_node[2]->GetTransform().position += glm::vec3(dlug,0,szer);
+        box_node[3]->GetTransform().position += glm::vec3(dlug,0,-szer);
+        box_node[4]->GetTransform().position += glm::vec3(dlug,0,-szer);
+        box_node[5]->GetTransform().position += glm::vec3(-dlug,0,szer);
+        box_node[6]->GetTransform().position += glm::vec3(-dlug,0,szer);
+        box_node[7]->GetTransform().position += glm::vec3(-dlug,0,-szer);
+        box_node[8]->GetTransform().position += glm::vec3(-dlug,0,-szer);
+
+        /// 10 : OS
+        box[10] = std::make_shared<Box>();
+        box[10]->Create(&shader_default, 2, 1, 2);
+        box_node[10] = std::make_shared<SceneGraphNode>(box[10]);
+        box_node[10]->GetTransform().position += glm::vec3(0, 1.5, 0);
+        box_node[0]->AddChild(box_node[10]);
+
+    }
 
     std::shared_ptr<RenderObject> light_box_1 = std::make_shared<LightMark>();
     light_box_1->Create(&shader_default, 1,1,1);
