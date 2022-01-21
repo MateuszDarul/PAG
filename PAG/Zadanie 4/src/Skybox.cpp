@@ -113,7 +113,7 @@ void Skybox::Draw()
     glBindVertexArray(0);
 }
 
-unsigned int Skybox::GetSkyboxTexture()
+unsigned int* Skybox::GetSkyboxTexture()
 {
-    return cubemap_texture;
+    return &cubemap_texture;
 }

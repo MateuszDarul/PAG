@@ -1,11 +1,11 @@
-#include "Mirror.h"
+#include "Glass.h"
 
-Mirror::Mirror(unsigned int* cubemap_texture)
+Glass::Glass(unsigned int* cubemap_texture)
 {
     this->cubemap_texture = cubemap_texture;
 }
 
-void Mirror::Create(Shader* shader, float size_x, float size_y, float size_z)
+void Glass::Create(Shader* shader, float size_x, float size_y, float size_z)
 {
     this->shader = shader;
 
@@ -70,7 +70,7 @@ void Mirror::Create(Shader* shader, float size_x, float size_y, float size_z)
     shader->setInt("skybox", 0);
 }
 
-void Mirror::Draw()
+void Glass::Draw()
 {
     shader->use();
     shader->setMat4("model", transform);

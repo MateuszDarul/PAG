@@ -4,7 +4,7 @@
 #include "RenderObject.h"
 
 
-class Mirror : public RenderObject
+class Glass : public RenderObject
 {
 private:
     unsigned int* cubemap_texture;
@@ -12,7 +12,7 @@ private:
     unsigned int VBO;
 
 public:
-    Mirror(unsigned int* cubemap_texture);
+    Glass(unsigned int* cubemap_texture);
 
     void Create(Shader* shader, float size_x, float size_y, float size_z);
     void Draw();

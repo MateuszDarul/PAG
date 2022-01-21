@@ -75,6 +75,8 @@ int main()
     Shader shader_default("resources/shaders/main.vert", "resources/shaders/main.frag");
     Shader shader_instance("resources/shaders/instance.vert", "resources/shaders/instance.frag");
     Shader shader_skybox("resources/shaders/skybox.vert", "resources/shaders/skybox.frag");
+    Shader shader_reflect("resources/shaders/reflect.vert", "resources/shaders/reflect.frag");
+    Shader shader_refract("resources/shaders/refract.vert", "resources/shaders/refract.frag");
 
     glm::mat4* model_matrices_dom;
     glm::mat4* model_matrices_dach;
@@ -115,6 +117,18 @@ int main()
     pyramid->Create(&shader_instance, 1.5,1,1.5);
     std::shared_ptr<SceneGraphNode> dachy = std::make_shared<SceneGraphNode>(pyramid);
     domki->AddChild(dachy);
+
+    std::shared_ptr<RenderObject> mirror = std::make_shared<Mirror>(skybox.GetSkyboxTexture());
+    mirror->Create(&shader_reflect, 20, 20, 20);
+    std::shared_ptr<SceneGraphNode> mirror_node = std::make_shared<SceneGraphNode>(mirror);
+    mirror_node->GetTransform().position += glm::vec3(0,10,0);
+    floor_node->AddChild(mirror_node);
+
+    std::shared_ptr<RenderObject> glass = std::make_shared<Mirror>(skybox.GetSkyboxTexture());
+    glass->Create(&shader_refract, 20, 20, 20);
+    std::shared_ptr<SceneGraphNode> glass_node = std::make_shared<SceneGraphNode>(glass);
+    glass_node->GetTransform().position += glm::vec3(40,10,0);
+    floor_node->AddChild(glass_node);
 
 
     std::shared_ptr<RenderObject> light_box_1 = std::make_shared<LightMark>();
@@ -290,6 +304,16 @@ int main()
 
                 ///------///
             }
+
+            shader_reflect.use();
+            shader_reflect.setMat4("view", view);
+            shader_reflect.setMat4("projection", projection);
+            shader_reflect.setVec3("camera_pos", camera.GetPosition());
+
+            shader_refract.use();
+            shader_refract.setMat4("view", view);
+            shader_refract.setMat4("projection", projection);
+            shader_refract.setVec3("camera_pos", camera.GetPosition());
 
             scene->Render(true);
 
