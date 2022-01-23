@@ -5,7 +5,7 @@ Skybox::Skybox()
 
 }
 
-void Skybox::Create(Shader* shader, float size_x, float size_y, float size_z)
+void Skybox::Create(Shader* shader, float size_x, float size_y, float size_z, float offset_x, float offset_y, float offset_z)
 {
     this->shader = shader;
 

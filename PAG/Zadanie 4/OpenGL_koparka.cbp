@@ -36,7 +36,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add option="-DGLFW_STATIC" />
-			<Add directory="E:/DevKit/MinGW_Lib/GLFW/include" />
+			<Add directory="D:/DevKit/MinGW_Lib/GLFW/include" />
 			<Add directory="../OpenGL" />
 			<Add directory="../OpenGL/GLAD/include" />
 			<Add directory="../OpenGL/ImGui/include" />
@@ -47,7 +47,7 @@
 		<Linker>
 			<Add library="glfw3" />
 			<Add library="gdi32" />
-			<Add directory="E:/DevKit/MinGW_Lib/GLFW/build/src" />
+			<Add directory="D:/DevKit/MinGW_Lib/GLFW/build/src" />
 		</Linker>
 		<Unit filename="../OpenGL/GLAD/include/glad/glad.h" />
 		<Unit filename="../OpenGL/GLAD/src/glad.c">
@@ -367,6 +367,7 @@
 		<Unit filename="include/UserInterface.h" />
 		<Unit filename="include/koparka/Box.h" />
 		<Unit filename="include/koparka/Glass.h" />
+		<Unit filename="include/koparka/Koparka.h" />
 		<Unit filename="include/koparka/Mirror.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="resources/shaders/instance.frag" />
@@ -392,6 +393,7 @@
 		<Unit filename="src/UserInterface.cpp" />
 		<Unit filename="src/koparka/Box.cpp" />
 		<Unit filename="src/koparka/Glass.cpp" />
+		<Unit filename="src/koparka/Koparka.cpp" />
 		<Unit filename="src/koparka/Mirror.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

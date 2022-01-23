@@ -15,13 +15,13 @@ enum Camera_Movement {
 };
 
 const float YAW = -90.0f;
-const float PITCH =  0.0f;
-const float SPEED =  0.045f;
+const float PITCH = 0.0f;
+const float SPEED = 0.045f;
 const float SENSITIVITY = 0.05f;
 
 class Camera
 {
-private:
+public:
     glm::vec3 Position;
     glm::vec3 Front;
     glm::vec3 Up;

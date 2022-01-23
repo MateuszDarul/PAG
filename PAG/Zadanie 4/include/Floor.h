@@ -17,7 +17,7 @@ public:
     Floor();
     ~Floor();
 
-    void Create(Shader* shader, float size_x, float size_y, float size_z);
+    void Create(Shader* shader, float size_x, float size_y, float size_z, float offset_x=0, float offset_y=0, float offset_z=0);
     void Draw();
 };
 

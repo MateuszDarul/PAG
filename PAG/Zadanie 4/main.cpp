@@ -19,7 +19,7 @@
 #include "Camera.h"
 
 #include "RenderObject.h"
-#include "Floor.h"
+#include "Koparka.h"
 
 void processInput(GLFWwindow *window);
 void mouseCallback(GLFWwindow* window, double xpos, double ypos);
@@ -40,6 +40,7 @@ bool firstMouse = true;
 
 /// Menu enable
 bool enable_menu = false;
+bool driver_mode = false;
 
 int main()
 {
@@ -118,62 +119,16 @@ int main()
     std::shared_ptr<SceneGraphNode> dachy = std::make_shared<SceneGraphNode>(pyramid);
     domki->AddChild(dachy);
 
-    std::shared_ptr<RenderObject> mirror = std::make_shared<Mirror>(skybox.GetSkyboxTexture());
-    mirror->Create(&shader_reflect, 20, 20, 20);
-    std::shared_ptr<SceneGraphNode> mirror_node = std::make_shared<SceneGraphNode>(mirror);
-    mirror_node->GetTransform().position += glm::vec3(0,10,0);
-    floor_node->AddChild(mirror_node);
 
-    std::shared_ptr<RenderObject> glass = std::make_shared<Mirror>(skybox.GetSkyboxTexture());
-    glass->Create(&shader_refract, 20, 20, 20);
-    std::shared_ptr<SceneGraphNode> glass_node = std::make_shared<SceneGraphNode>(glass);
-    glass_node->GetTransform().position += glm::vec3(40,10,0);
-    floor_node->AddChild(glass_node);
+    ///---
+    Shader* shader_list[3];
+    shader_list[0] = &shader_default;
+    shader_list[1] = &shader_reflect;
+    shader_list[2] = &shader_refract;
+    Koparka koparka(floor_node, shader_list, &skybox);
+    user_interface->koparka = &koparka;
+    ///---
 
-    static int ilosc_elementow = 10;
-    std::shared_ptr<RenderObject> box[ilosc_elementow];
-    std::shared_ptr<SceneGraphNode> box_node[ilosc_elementow];
-    {///KOPARKA
-
-        int szer = 5;
-        int dlug = 10;
-
-        /// 0 : Korpus
-        box[0] = std::make_shared<Box>();
-        box[0]->Create(&shader_default, 2*dlug, 2, 1.5*szer);
-        box_node[0] = std::make_shared<SceneGraphNode>(box[0]);
-        box_node[0]->GetTransform().position += glm::vec3(-40,10,0);
-        floor_node->AddChild(box_node[0]);
-
-        /// 1 - 9 : Kola
-        for(int i=1; i<9; i++)
-        {
-            box[i] = std::make_shared<Box>();
-            box[i]->Create(&shader_default, 5, 5, 2.5);
-            box_node[i] = std::make_shared<SceneGraphNode>(box[i]);
-            box_node[i]->GetTransform().position += glm::vec3(0,-2,0);
-            if(i%2 == 0)
-                box_node[i]->GetTransform().rotation += glm::vec3(0, 0, 45);
-
-            box_node[0]->AddChild(box_node[i]);
-        }
-        box_node[1]->GetTransform().position += glm::vec3(dlug,0,szer);
-        box_node[2]->GetTransform().position += glm::vec3(dlug,0,szer);
-        box_node[3]->GetTransform().position += glm::vec3(dlug,0,-szer);
-        box_node[4]->GetTransform().position += glm::vec3(dlug,0,-szer);
-        box_node[5]->GetTransform().position += glm::vec3(-dlug,0,szer);
-        box_node[6]->GetTransform().position += glm::vec3(-dlug,0,szer);
-        box_node[7]->GetTransform().position += glm::vec3(-dlug,0,-szer);
-        box_node[8]->GetTransform().position += glm::vec3(-dlug,0,-szer);
-
-        /// 10 : OS
-        box[10] = std::make_shared<Box>();
-        box[10]->Create(&shader_default, 2, 1, 2);
-        box_node[10] = std::make_shared<SceneGraphNode>(box[10]);
-        box_node[10]->GetTransform().position += glm::vec3(0, 1.5, 0);
-        box_node[0]->AddChild(box_node[10]);
-
-    }
 
     std::shared_ptr<RenderObject> light_box_1 = std::make_shared<LightMark>();
     light_box_1->Create(&shader_default, 1,1,1);
@@ -200,6 +155,7 @@ int main()
     glm::mat4 view;
 
     float kat = 0, promien=510;
+    glm::vec3 move_vector = glm::vec3(0,0,0);
 
     while(!glfwWindowShouldClose(window))
     {
@@ -210,6 +166,73 @@ int main()
 
         /// input
         processInput(window);
+        {
+            if(driver_mode)
+            {
+                if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+                {
+                    camera.ProcessKeyboard(FORWARD, frame_time);
+                    user_interface->kolo -= 0.002;
+                    koparka.Kolo(0, user_interface->kolo);
+                    koparka.Kolo(1, user_interface->kolo);
+                    koparka.Kolo(2, user_interface->kolo);
+                    koparka.Kolo(3, user_interface->kolo);
+                    koparka.Move(glm::vec3(0.0002 * camera.Front.x, 0, 0.0002 * camera.Front.z));
+                }
+                if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+                {
+                    camera.ProcessKeyboard(BACKWARD, frame_time);
+                    user_interface->kolo += 0.002;
+                    koparka.Kolo(0, user_interface->kolo);
+                    koparka.Kolo(1, user_interface->kolo);
+                    koparka.Kolo(2, user_interface->kolo);
+                    koparka.Kolo(3, user_interface->kolo);
+                    koparka.Move(glm::vec3(-0.0002 * camera.Front.x, 0, -0.0002 * camera.Front.z));
+                }
+                if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+                {
+                    camera.ProcessKeyboard(LEFT, frame_time);
+                    if(user_interface->kola < 45)
+                    {
+                        user_interface->kola += 0.002;
+                        koparka.Kola(user_interface->kola);
+                    }
+                    koparka.GetNode(0)->GetTransform().rotation.y += 0.0005;
+                }
+                if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+                {
+                    camera.ProcessKeyboard(RIGHT, frame_time);
+                    if(user_interface->kola > -45)
+                    {
+                        user_interface->kola -= 0.002;
+                        koparka.Kola(user_interface->kola);
+                    }
+                    koparka.GetNode(0)->GetTransform().rotation.y -= 0.0005;
+                }
+
+                camera.Position = koparka.GetNode(0)->GetTransform().position;
+                camera.Position -= glm::vec3(camera.Front.x*100, camera.Front.y*100, camera.Front.z*100);
+            }
+            else
+            {
+                if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+                {
+                    camera.ProcessKeyboard(FORWARD, frame_time);
+                }
+                if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+                {
+                    camera.ProcessKeyboard(BACKWARD, frame_time);
+                }
+                if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+                {
+                    camera.ProcessKeyboard(LEFT, frame_time);
+                }
+                if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+                {
+                    camera.ProcessKeyboard(RIGHT, frame_time);
+                }
+            }
+        }
 
 
         /// update
@@ -266,14 +289,14 @@ int main()
 
                 shader->setBool("point_light_enable", user_interface->point_light_enable);
                 shader->setVec3("point_light.position",
-                                       glm::vec3(user_interface->point_light_position[0],
-                                                 user_interface->point_light_position[1],
-                                                 user_interface->point_light_position[2]));
+                                glm::vec3(user_interface->point_light_position[0],
+                                          user_interface->point_light_position[1],
+                                          user_interface->point_light_position[2]));
                 shader->setVec3("point_light.ambient", 0, 0, 0);
                 shader->setVec3("point_light.diffuse",
-                                       glm::vec3(user_interface->point_light_color[0],
-                                                 user_interface->point_light_color[1],
-                                                 user_interface->point_light_color[2]));
+                                glm::vec3(user_interface->point_light_color[0],
+                                          user_interface->point_light_color[1],
+                                          user_interface->point_light_color[2]));
                 shader->setVec3("point_light.specular", 1.0f, 1.0f, 1.0f);
                 shader->setFloat("point_light.constant", 1.0f);
                 shader->setFloat("point_light.linear", user_interface->point_lightWli);
@@ -285,14 +308,14 @@ int main()
 
                 shader->setBool("directional_light_enable", user_interface->directional_light_enable);
                 shader->setVec3("directional_light.direction",
-                                       glm::vec3(user_interface->directional_light_direction[0],
-                                                 user_interface->directional_light_direction[1],
-                                                 user_interface->directional_light_direction[2]));
+                                glm::vec3(user_interface->directional_light_direction[0],
+                                          user_interface->directional_light_direction[1],
+                                          user_interface->directional_light_direction[2]));
                 shader->setVec3("directional_light.ambient", 0.2f, 0.2f, 0.2f);
                 shader->setVec3("directional_light.diffuse",
-                                       glm::vec3(user_interface->directional_light_color[0],
-                                                 user_interface->directional_light_color[1],
-                                                 user_interface->directional_light_color[2]));
+                                glm::vec3(user_interface->directional_light_color[0],
+                                          user_interface->directional_light_color[1],
+                                          user_interface->directional_light_color[2]));
                 shader->setVec3("directional_light.specular", 1.0f, 1.0f, 1.0f);
                 shader->setFloat("directional_material.shininess", 32.0f);
 
@@ -301,13 +324,13 @@ int main()
 
                 shader->setBool("spot_1_light_enable", user_interface->spot_light_1_enable);
                 shader->setVec3("light_1.position",
-                                       glm::vec3(user_interface->spot_light_1_position[0],
-                                                 user_interface->spot_light_1_position[1],
-                                                 user_interface->spot_light_1_position[2]));
+                                glm::vec3(user_interface->spot_light_1_position[0],
+                                          user_interface->spot_light_1_position[1],
+                                          user_interface->spot_light_1_position[2]));
                 shader->setVec3("light_1.direction",
-                                       glm::vec3(user_interface->spot_light_1_direction[0],
-                                                 user_interface->spot_light_1_direction[1],
-                                                 user_interface->spot_light_1_direction[2]));
+                                glm::vec3(user_interface->spot_light_1_direction[0],
+                                          user_interface->spot_light_1_direction[1],
+                                          user_interface->spot_light_1_direction[2]));
                 shader->setFloat("light_1.cutOff", glm::cos(glm::radians(user_interface->spot_light_1_radius[0])));
                 shader->setFloat("light_1.outerCutOff", glm::cos(glm::radians(user_interface->spot_light_1_radius[0]+user_interface->spot_light_1_radius[1])));
                 shader->setVec3("light_1.specular", 1.f, 1.f, 1.f);
@@ -317,22 +340,22 @@ int main()
                 shader->setFloat("material_1.shininess", 32.0f);
                 shader->setVec3("light_1.ambient", 0.f, 0.f, 0.f);
                 shader->setVec3("light_1.diffuse",
-                                       glm::vec3(user_interface->spot_light_1_color[0],
-                                                 user_interface->spot_light_1_color[1],
-                                                 user_interface->spot_light_1_color[2]));
+                                glm::vec3(user_interface->spot_light_1_color[0],
+                                          user_interface->spot_light_1_color[1],
+                                          user_interface->spot_light_1_color[2]));
 
                 ///------///
                 ///---Spot 2---///
 
                 shader->setBool("spot_2_light_enable", user_interface->spot_light_2_enable);
                 shader->setVec3("light_2.position",
-                                       glm::vec3(user_interface->spot_light_2_position[0],
-                                                 user_interface->spot_light_2_position[1],
-                                                 user_interface->spot_light_2_position[2]));
+                                glm::vec3(user_interface->spot_light_2_position[0],
+                                          user_interface->spot_light_2_position[1],
+                                          user_interface->spot_light_2_position[2]));
                 shader->setVec3("light_2.direction",
-                                       glm::vec3(user_interface->spot_light_2_direction[0],
-                                                 user_interface->spot_light_2_direction[1],
-                                                 user_interface->spot_light_2_direction[2]));
+                                glm::vec3(user_interface->spot_light_2_direction[0],
+                                          user_interface->spot_light_2_direction[1],
+                                          user_interface->spot_light_2_direction[2]));
                 shader->setFloat("light_2.cutOff", glm::cos(glm::radians(user_interface->spot_light_2_radius[0])));
                 shader->setFloat("light_2.outerCutOff", glm::cos(glm::radians(user_interface->spot_light_2_radius[0]+user_interface->spot_light_2_radius[1])));
                 shader->setVec3("light_2.specular", 1.f, 1.f, 1.f);
@@ -342,9 +365,9 @@ int main()
                 shader->setFloat("material_2.shininess", 32.0f);
                 shader->setVec3("light_2.ambient", 0.f, 0.f, 0.f);
                 shader->setVec3("light_2.diffuse",
-                                       glm::vec3(user_interface->spot_light_2_color[0],
-                                                 user_interface->spot_light_2_color[1],
-                                                 user_interface->spot_light_2_color[2]));
+                                glm::vec3(user_interface->spot_light_2_color[0],
+                                          user_interface->spot_light_2_color[1],
+                                          user_interface->spot_light_2_color[2]));
 
                 ///------///
             }
@@ -385,8 +408,10 @@ int main()
     return 0;
 }
 
-bool isPressed = false;
-bool old_isPressed = false;
+bool isPressed_TAB = false;
+bool old_isPressed_TAB = false;
+bool isPressed_SHIFT = false;
+bool old_isPressed_SHIFT = false;
 void processInput(GLFWwindow *window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -394,37 +419,38 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
     }
 
-    if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        camera.ProcessKeyboard(FORWARD, frame_time);
-    }
-    if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        camera.ProcessKeyboard(BACKWARD, frame_time);
-    }
-    if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    {
-        camera.ProcessKeyboard(LEFT, frame_time);
-    }
-    if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        camera.ProcessKeyboard(RIGHT, frame_time);
-    }
 
+    if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+    {
+        isPressed_SHIFT = true;
+    }
+    else if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
+    {
+        isPressed_SHIFT = false;
+    }
+    if(isPressed_SHIFT != old_isPressed_SHIFT)
+    {
+        old_isPressed_SHIFT = !old_isPressed_SHIFT;
+
+        if(isPressed_SHIFT)
+        {
+            driver_mode = !driver_mode;
+        }
+    }
 
     if(glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS)
     {
-        isPressed = true;
+        isPressed_TAB = true;
     }
     else if(glfwGetKey(window, GLFW_KEY_TAB) == GLFW_RELEASE)
     {
-        isPressed = false;
+        isPressed_TAB = false;
     }
-    if(isPressed != old_isPressed)
+    if(isPressed_TAB != old_isPressed_TAB)
     {
-        old_isPressed = !old_isPressed;
+        old_isPressed_TAB = !old_isPressed_TAB;
 
-        if(isPressed)
+        if(isPressed_TAB)
         {
             enable_menu = !enable_menu;
             if(enable_menu)

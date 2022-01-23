@@ -12,9 +12,12 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
+#include "Koparka.h"
+
 class UserInterface
 {
 public:
+
     bool directional_light_enable;
     float directional_light_direction[3];
     float directional_light_color[3];
@@ -40,6 +43,15 @@ public:
     float spot_light_2_direction[3];
     float spot_light_2_color[3];
     float spot_light_2_radius[2];
+
+    /// koparka
+    Koparka* koparka;
+    float oska;
+    float ramie_1;
+    float ramie_2;
+    float szufla;
+    float kolo;
+    float kola;
 
 public:
     UserInterface(GLFWwindow* window);

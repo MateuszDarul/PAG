@@ -55,6 +55,13 @@ UserInterface::UserInterface(GLFWwindow* window)
     spot_light_2_color[2] = 1;
     spot_light_2_radius[0] = 12.5;
     spot_light_2_radius[1] = 17.5;
+
+    oska = 0;
+    ramie_1 = 0;
+    ramie_2 = 0;
+    szufla = 0;
+    kolo = 0;
+    kola = 0;
 }
 
 UserInterface::~UserInterface()
@@ -107,10 +114,18 @@ void UserInterface::Display()
 
         ImGui::Begin("Sterowanie");
         {
-
+            ImGui::SliderFloat("Oska", &oska, -180, 180);
+            ImGui::SliderFloat("Ramie 1", &ramie_1, 0, 80);
+            ImGui::SliderFloat("Ramie 2", &ramie_2, 0, 120);
+            ImGui::SliderFloat("Szufla", &szufla, -60, 60);
         }
         ImGui::End();
     }
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    koparka->Oska(-oska);
+    koparka->Ramie(0, -ramie_1);
+    koparka->Ramie(1, -ramie_2);
+    koparka->Szufla(szufla);
 }

@@ -26,7 +26,7 @@ protected:
 public:
     RenderObject();
     virtual ~RenderObject();
-    virtual void Create(Shader* shader, float size_x, float size_y, float size_z)=0;
+    virtual void Create(Shader* shader, float size_x, float size_y, float size_z, float offset_x=0, float offset_y=0, float offset_z=0)=0;
     virtual void Draw()=0;
     void setTransform(glm::mat4 transform);
 };

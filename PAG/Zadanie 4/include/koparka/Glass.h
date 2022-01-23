@@ -1,5 +1,5 @@
-#ifndef __MIRROR_H__
-#define __MIRROR_H__
+#ifndef __GLASS_H__
+#define __GLASS_H__
 
 #include "RenderObject.h"
 
@@ -14,8 +14,8 @@ private:
 public:
     Glass(unsigned int* cubemap_texture);
 
-    void Create(Shader* shader, float size_x, float size_y, float size_z);
+    void Create(Shader* shader, float size_x, float size_y, float size_z, float offset_x=0, float offset_y=0, float offset_z=0);
     void Draw();
 };
 
-#endif // __MIRROR_H__
+#endif // __GLASS_H__

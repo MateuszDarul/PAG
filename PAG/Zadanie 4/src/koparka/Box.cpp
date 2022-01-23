@@ -6,54 +6,54 @@ Box::Box(std::string texture_name)
 
 }
 
-void Box::Create(Shader* shader, float size_x, float size_y, float size_z)
+void Box::Create(Shader* shader, float size_x, float size_y, float size_z, float offset_x, float offset_y, float offset_z)
 {
     this->shader = shader;
 
     float vertices[] =
     {
         /// x y z - pos --- x y z - normal --- x t - texture coord
-        -0.5f*size_x, -0.5f*size_y, -0.5f*size_z,     0.0f,  0.0f, -1.0f, 1.0f, 0.0f,
-            0.5f*size_x, -0.5f*size_y, -0.5f*size_z,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
-            0.5f*size_x,  0.5f*size_y, -0.5f*size_z,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f,
-            0.5f*size_x,  0.5f*size_y, -0.5f*size_z,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f,
-            -0.5f*size_x,  0.5f*size_y, -0.5f*size_z, 0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
-            -0.5f*size_x, -0.5f*size_y, -0.5f*size_z, 0.0f,  0.0f, -1.0f, 1.0f, 0.0f,
+            -0.5f*size_x + offset_x, -0.5f*size_y + offset_y, -0.5f*size_z + offset_z,     0.0f,  0.0f, -1.0f, 1.0f, 0.0f,
+            0.5f*size_x + offset_x, -0.5f*size_y + offset_y, -0.5f*size_z + offset_z,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
+            0.5f*size_x + offset_x,  0.5f*size_y + offset_y, -0.5f*size_z + offset_z,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f,
+            0.5f*size_x + offset_x,  0.5f*size_y + offset_y, -0.5f*size_z + offset_z,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f,
+            -0.5f*size_x + offset_x,  0.5f*size_y + offset_y, -0.5f*size_z + offset_z, 0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
+            -0.5f*size_x + offset_x, -0.5f*size_y + offset_y, -0.5f*size_z + offset_z, 0.0f,  0.0f, -1.0f, 1.0f, 0.0f,
 
-            -0.5f*size_x, -0.5f*size_y,  0.5f*size_z,  0.0f,  0.0f, 1.0f, 1.0f, 0.0f,
-            0.5f*size_x, -0.5f*size_y,  0.5f*size_z,   0.0f,  0.0f, 1.0f, 1.0f, 1.0f,
-            0.5f*size_x,  0.5f*size_y,  0.5f*size_z,   0.0f,  0.0f, 1.0f, 0.0f, 1.0f,
-            0.5f*size_x,  0.5f*size_y,  0.5f*size_z,   0.0f,  0.0f, 1.0f, 0.0f, 1.0f,
-            -0.5f*size_x,  0.5f*size_y,  0.5f*size_z,  0.0f,  0.0f, 1.0f, 0.0f, 0.0f,
-            -0.5f*size_x, -0.5f*size_y,  0.5f*size_z,  0.0f,  0.0f, 1.0f, 1.0f, 0.0f,
+            -0.5f*size_x + offset_x, -0.5f*size_y + offset_y,  0.5f*size_z + offset_z,  0.0f,  0.0f, 1.0f, 1.0f, 0.0f,
+            0.5f*size_x + offset_x, -0.5f*size_y + offset_y,  0.5f*size_z + offset_z,   0.0f,  0.0f, 1.0f, 1.0f, 1.0f,
+            0.5f*size_x + offset_x,  0.5f*size_y + offset_y,  0.5f*size_z + offset_z,   0.0f,  0.0f, 1.0f, 0.0f, 1.0f,
+            0.5f*size_x + offset_x,  0.5f*size_y + offset_y,  0.5f*size_z + offset_z,   0.0f,  0.0f, 1.0f, 0.0f, 1.0f,
+            -0.5f*size_x + offset_x,  0.5f*size_y + offset_y,  0.5f*size_z + offset_z,  0.0f,  0.0f, 1.0f, 0.0f, 0.0f,
+            -0.5f*size_x + offset_x, -0.5f*size_y + offset_y,  0.5f*size_z + offset_z,  0.0f,  0.0f, 1.0f, 1.0f, 0.0f,
 
-            -0.5f*size_x,  0.5f*size_y,  0.5f*size_z, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-            -0.5f*size_x,  0.5f*size_y, -0.5f*size_z, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
-            -0.5f*size_x, -0.5f*size_y, -0.5f*size_z, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-            -0.5f*size_x, -0.5f*size_y, -0.5f*size_z, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-            -0.5f*size_x, -0.5f*size_y,  0.5f*size_z, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
-            -0.5f*size_x,  0.5f*size_y,  0.5f*size_z, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+            -0.5f*size_x + offset_x,  0.5f*size_y + offset_y,  0.5f*size_z + offset_z, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+            -0.5f*size_x + offset_x,  0.5f*size_y + offset_y, -0.5f*size_z + offset_z, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
+            -0.5f*size_x + offset_x, -0.5f*size_y + offset_y, -0.5f*size_z + offset_z, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+            -0.5f*size_x + offset_x, -0.5f*size_y + offset_y, -0.5f*size_z + offset_z, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+            -0.5f*size_x + offset_x, -0.5f*size_y + offset_y,  0.5f*size_z + offset_z, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+            -0.5f*size_x + offset_x,  0.5f*size_y + offset_y,  0.5f*size_z + offset_z, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
 
-            0.5f*size_x,  0.5f*size_y,  0.5f*size_z,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-            0.5f*size_x,  0.5f*size_y, -0.5f*size_z,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
-            0.5f*size_x, -0.5f*size_y, -0.5f*size_z,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-            0.5f*size_x, -0.5f*size_y, -0.5f*size_z,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-            0.5f*size_x, -0.5f*size_y,  0.5f*size_z,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
-            0.5f*size_x,  0.5f*size_y,  0.5f*size_z,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+            0.5f*size_x + offset_x,  0.5f*size_y + offset_y,  0.5f*size_z + offset_z,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+            0.5f*size_x + offset_x,  0.5f*size_y + offset_y, -0.5f*size_z + offset_z,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
+            0.5f*size_x + offset_x, -0.5f*size_y + offset_y, -0.5f*size_z + offset_z,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+            0.5f*size_x + offset_x, -0.5f*size_y + offset_y, -0.5f*size_z + offset_z,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+            0.5f*size_x + offset_x, -0.5f*size_y + offset_y,  0.5f*size_z + offset_z,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+            0.5f*size_x + offset_x,  0.5f*size_y + offset_y,  0.5f*size_z + offset_z,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
 
-            -0.5f*size_x, -0.5f*size_y, -0.5f*size_z, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
-            0.5f*size_x, -0.5f*size_y, -0.5f*size_z,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f,
-            0.5f*size_x, -0.5f*size_y,  0.5f*size_z,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
-            0.5f*size_x, -0.5f*size_y,  0.5f*size_z,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
-            -0.5f*size_x, -0.5f*size_y,  0.5f*size_z, 0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
-            -0.5f*size_x, -0.5f*size_y, -0.5f*size_z, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
+            -0.5f*size_x + offset_x, -0.5f*size_y + offset_y, -0.5f*size_z + offset_z, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
+            0.5f*size_x + offset_x, -0.5f*size_y + offset_y, -0.5f*size_z + offset_z,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f,
+            0.5f*size_x + offset_x, -0.5f*size_y + offset_y,  0.5f*size_z + offset_z,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
+            0.5f*size_x + offset_x, -0.5f*size_y + offset_y,  0.5f*size_z + offset_z,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
+            -0.5f*size_x + offset_x, -0.5f*size_y + offset_y,  0.5f*size_z + offset_z, 0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
+            -0.5f*size_x + offset_x, -0.5f*size_y + offset_y, -0.5f*size_z + offset_z, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
 
-            -0.5f*size_x,  0.5f*size_y, -0.5f*size_z, 0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
-            0.5f*size_x,  0.5f*size_y, -0.5f*size_z,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f,
-            0.5f*size_x,  0.5f*size_y,  0.5f*size_z,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f,
-            0.5f*size_x,  0.5f*size_y,  0.5f*size_z,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f,
-            -0.5f*size_x,  0.5f*size_y,  0.5f*size_z, 0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
-            -0.5f*size_x,  0.5f*size_y, -0.5f*size_z, 0.0f,  1.0f,  0.0f, 1.0f, 0.0f
+            -0.5f*size_x + offset_x,  0.5f*size_y + offset_y, -0.5f*size_z + offset_z, 0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
+            0.5f*size_x + offset_x,  0.5f*size_y + offset_y, -0.5f*size_z + offset_z,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f,
+            0.5f*size_x + offset_x,  0.5f*size_y + offset_y,  0.5f*size_z + offset_z,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f,
+            0.5f*size_x + offset_x,  0.5f*size_y + offset_y,  0.5f*size_z + offset_z,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f,
+            -0.5f*size_x + offset_x,  0.5f*size_y + offset_y,  0.5f*size_z + offset_z, 0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
+            -0.5f*size_x + offset_x,  0.5f*size_y + offset_y, -0.5f*size_z + offset_z, 0.0f,  1.0f,  0.0f, 1.0f, 0.0f
         };
 
     glGenVertexArrays(1, &VAO);
